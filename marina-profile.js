@@ -1,5 +1,6 @@
 // Marina API call
 if (window.location.search) {
+    console.log("TEST");
     const urlParams = new URLSearchParams(window.location.search);
     var searchTerm = urlParams.get('slug');
     request = new XMLHttpRequest()
