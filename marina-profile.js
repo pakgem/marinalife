@@ -1,4 +1,4 @@
-  // if the page url has a query string
+  // if the page url has a query string test
   if (window.location.search) {
     // get all url search params from the query string
     const urlParams = new URLSearchParams(window.location.search);
