@@ -1,24 +1,21 @@
-  // if the page url has a query string test
-  if (window.location.search) {
-    // get all url search params from the query string
+// Marina API call
+if (window.location.search) {
     const urlParams = new URLSearchParams(window.location.search);
-    // get the value of the search param
     var searchTerm = urlParams.get('slug');
-    // Create a request variable and assign a new XMLHttpRequest object to it.
     request = new XMLHttpRequest()
     let marinaUrl = new URL('https://zzftxmm4b66igiuxj2bxk2vln40rbcfv.lambda-url.us-east-1.on.aws/?slug=' + searchTerm);
-    // Open a new connection, using the GET request on the URL endpoint
     request.open('GET', marinaUrl.toString(), true)
     request.onload = function() {
       var data = JSON.parse(this.response)
       if (request.status >= 200 && request.status < 400) {
         var source = data.Items[0];
+        $('title').text(source.seo_title);
+        $('meta[name=description]').attr('content', source.seo_metadesc);
         const lat = source.lat;
         const lng = source.lng;
         const LatLng = lat + ',' + lng;
         const client = algoliasearch('70H8CY4ZEE', 'ebb2e4d36e27f20d4e1d6b237243c8dd');
         const index = client.initIndex('marina_profiles');
-        // only query string
         index.search('', {
           aroundLatLng: LatLng,
           aroundRadius: 100000,
@@ -26,7 +23,6 @@
         }).then(({
           hits
         }) => {
-        // populate nearby marinas, excluding itself
           var m1 = hits[1];
           var m2 = hits[2];
           if (!m1) {
@@ -160,6 +156,9 @@
             });
           }
         }
+        if(!source.total_slips && !source.max_boat_length && !source.approach_depth && !source.dock_depth){
+					$(".marina-info-stats-wrapper").hide();
+				}
         $("#total-slips").text((source.total_slips) ? source.total_slips : "- -");
         $("#min-length").text((source.min_boat_length) ? source.min_boat_length : "- -");
         $("#max-length").text((source.max_boat_length) ? source.max_boat_length : "- -");
@@ -239,7 +238,6 @@
           }
         }
       } else {
-        console.log('error')
       }
       if (!source.marina_policies && !source.marina_rates &&
         $("#fuel-link").is(":hidden") && !source.gas_price && !source.diesel_price) {
@@ -247,6 +245,5 @@
         $("#marina-dropdown").hide();
       }
     }
-    // Send request
     request.send()
   }
