@@ -202,7 +202,6 @@ if (window.location.search) {
           $("#sas_bookingwidget").attr("data-url", source.snag_reservation_link);
         } else {
           $(".marina-result-content").css("width", "100%");
-          $(".amenities-list").css("max-height", "200px");
           $('.marina-result-sidebar').hide();
         }
         sasBookingWidgets();
